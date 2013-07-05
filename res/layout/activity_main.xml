@@ -24,4 +24,10 @@
         android:text= "Clipboard Get Text From and Over SDK 11"
         android:onClick="getTextClipboardFromAndOverSDK11"
         />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "Get List Word from LocalService"
+        android:onClick="getListWordFromLocalService"
+        />
 </LinearLayout>

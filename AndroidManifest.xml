@@ -8,6 +8,8 @@
         android:minSdkVersion="7"
         android:targetSdkVersion="7" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -23,6 +25,7 @@
             </intent-filter>
         </activity>
         <!-- registering intent receiver for PACKAGE_ADDED or PACKAGE_REMOVED -->
+       <!-- 
         <receiver 
             android:name="com.gandan.android.poc.pm.IntentReceiver" >
             <intent-filter>
@@ -30,6 +33,20 @@
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
                 <data android:scheme="package" />
             </intent-filter>
+        </receiver>
+         -->
+         
+         <!-- Practice Local Service -->
+         <service
+            android:name=".service.local.LocalWordService">
+        </service>
+
+        <receiver android:name=".service.local.MyScheduleReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".service.local.MyStartServiceReceiver" >
         </receiver>
     </application>
 
