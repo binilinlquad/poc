@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.gandan.android.poc.clipboard.ClipboardGetterUnderSDK11;
 import com.gandan.android.poc.clipboard.ClipboardGetterFromAndOverSDK11;
 import com.gandan.android.poc.service.local.LocalWordService;
+import com.gandan.android.poc.bluetooth.BluetoothModule;
 
 public class MainActivity extends Activity {
 	private LocalWordService s;
@@ -65,4 +66,8 @@ public class MainActivity extends Activity {
 	    		Toast.LENGTH_SHORT).show();
 	    }
 	}
+
+    public void getBluetoothAdapter(View view){
+	new BluetoothModule(this);
+    }
 }
