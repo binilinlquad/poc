@@ -19,7 +19,7 @@ import android.widget.Toast;
 import java.lang.NullPointerException;
 
 public class BluetoothModule extends BroadcastReceiver {
-    private static final String  TAG = BluetoothModule.class.getSimpleName();
+    private final static String  TAG = BluetoothModule.class.getSimpleName();
     private final BluetoothAdapter mBluetoothAdapter;
     private final static int REQUEST_ENABLE_BT = 1;
     private boolean mEnabled = false;
