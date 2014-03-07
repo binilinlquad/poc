@@ -30,4 +30,8 @@
         android:text= "Get List Word from LocalService"
         android:onClick="getListWordFromLocalService"
         />
+    <com.gandan.android.poc.ui.CircleView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        />
 </LinearLayout>
