@@ -35,7 +35,7 @@ public class CircleView extends View {
      * Background's paint.
      *
      */
-    private Paint mBackgroundColorPaint;
+    private Paint mColorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     /**
      * The rectangle enclosing the circle.
@@ -96,9 +96,9 @@ public class CircleView extends View {
     public CircleView(final Context context, final AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        setProgressBackgroundColor(Color.CYAN);
+        setColor(Color.CYAN);
         setWheelSize(mStrokeWidth);
-        updateBackgroundColor();
+        updateColor();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class CircleView extends View {
         canvas.translate(mTranslationOffsetX, mTranslationOffsetY);
 
         // do drawing here
-        canvas.drawArc(mCircleBounds, mStartAngle, mSweepAngle, false, mBackgroundColorPaint);
+        canvas.drawArc(mCircleBounds, mStartAngle, mSweepAngle, false, mColorPaint);
     }
 
     /**
@@ -131,23 +131,13 @@ public class CircleView extends View {
         mTranslationOffsetY = halfWidth;
     }
 
-
-    /**
-     * Force redraw
-     */
-    public void redraw(){
-        updateBackgroundColor();
-    }
-
     /**
      *  update background and circle color. Invalidate at the end function
      */
-    // TODO : correcting method name
-    private void updateBackgroundColor() {
-        mBackgroundColorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBackgroundColorPaint.setColor(mCircleColor);
-        mBackgroundColorPaint.setStyle(Paint.Style.STROKE);
-        mBackgroundColorPaint.setStrokeWidth(mCircleStrokeWidth);
+    public void updateColor() {
+        mColorPaint.setColor(mCircleColor);
+        mColorPaint.setStyle(Paint.Style.STROKE);
+        mColorPaint.setStrokeWidth(mCircleStrokeWidth);
 
         invalidate();
     }
@@ -155,8 +145,7 @@ public class CircleView extends View {
     /**
      *  set circle color
      */
-    // TODO: correcting method name
-    public void setProgressBackgroundColor(final int color) {
+    public void setColor(final int color) {
        mCircleColor  = color;
     }
 
@@ -191,8 +180,8 @@ public class CircleView extends View {
     protected void onRestoreInstanceState(final Parcelable state) {
         if( state instanceof  Bundle) {
             final Bundle bundle = (Bundle) state;
-            setProgressBackgroundColor(bundle.getInt(COLOR));
-            updateBackgroundColor();
+            setColor(bundle.getInt(COLOR));
+            updateColor();
 
             super.onRestoreInstanceState(bundle.getParcelable(STATE_SAVED));
             return;

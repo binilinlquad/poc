@@ -1,6 +1,5 @@
 package com.gandan.android.poc;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,12 +9,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 import android.animation.ObjectAnimator;
-import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 
 import com.gandan.android.poc.clipboard.ClipboardGetterUnderSDK11;
@@ -98,9 +95,9 @@ public class MainActivity extends Activity {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 // unsafe casting
-                ((CircleView)view).setProgressBackgroundColor((Integer)valueAnimator.getAnimatedValue());
+                ((CircleView)view).setColor((Integer) valueAnimator.getAnimatedValue());
                 // redraw
-                ((CircleView)view).redraw();
+                ((CircleView)view).updateColor();
 
                 // Change background color through view
                 //view.setBackgroundColor((Integer)valueAnimator.getAnimatedValue());
