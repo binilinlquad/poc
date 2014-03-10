@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -18,6 +20,16 @@ import android.view.View;
 public class CircleView extends View {
 
     private static final String TAG = CircleView.class.getSimpleName();
+
+    /**
+     * tag color
+     */
+    public static final String COLOR = "color";
+
+    /**
+     * tag state saved
+     */
+    public static final String STATE_SAVED = "state_saved";
 
     /**
      * Background's paint.
@@ -98,6 +110,11 @@ public class CircleView extends View {
         canvas.drawArc(mCircleBounds, mStartAngle, mSweepAngle, false, mBackgroundColorPaint);
     }
 
+    /**
+ 	 * (non-Javadoc)
+     *
+     * @see android.view.View#onMeasure(int, int)
+     */
     @Override
     public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         final int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
@@ -115,6 +132,17 @@ public class CircleView extends View {
     }
 
 
+    /**
+     * Force redraw
+     */
+    public void redraw(){
+        updateBackgroundColor();
+    }
+
+    /**
+     *  update background and circle color. Invalidate at the end function
+     */
+    // TODO : correcting method name
     private void updateBackgroundColor() {
         mBackgroundColorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBackgroundColorPaint.setColor(mCircleColor);
@@ -124,16 +152,51 @@ public class CircleView extends View {
         invalidate();
     }
 
+    /**
+     *  set circle color
+     */
+    // TODO: correcting method name
     public void setProgressBackgroundColor(final int color) {
        mCircleColor  = color;
     }
 
+    /**
+     * set how big is the circle
+     *
+     * @param dimension - int
+     */
     public void setWheelSize(final int dimension) {
         mCircleStrokeWidth = dimension;
     }
 
-/*    public void setOffsetXY(float x, float y) {
-        mTranslationOffsetX = x;
-        mTranslationOffsetY = y;
-    }*/
+    /**
+ 	 * (non-Javadoc)
+     *
+     * @see android.view.View#onSaveInstanceState()
+     */
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable(STATE_SAVED, super.onSaveInstanceState());
+        bundle.putInt(COLOR, mCircleColor);
+        return bundle;
+    }
+
+    /**
+  	 * (non-Javadoc)
+     *
+     * @see android.view.View#onRestoreInstanceState(android.os.Parcelable)
+     */
+    @Override
+    protected void onRestoreInstanceState(final Parcelable state) {
+        if( state instanceof  Bundle) {
+            final Bundle bundle = (Bundle) state;
+            setProgressBackgroundColor(bundle.getInt(COLOR));
+            updateBackgroundColor();
+
+            super.onRestoreInstanceState(bundle.getParcelable(STATE_SAVED));
+            return;
+        }
+        super.onRestoreInstanceState(state);
+    }
 }
