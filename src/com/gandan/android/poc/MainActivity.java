@@ -1,5 +1,6 @@
 package com.gandan.android.poc;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -82,10 +83,15 @@ public class MainActivity extends Activity {
      * @param view instance of CircleView
      */
     public void animateCircle(final View view) {
-        long duration = 3000;
+        long duration = 5000;
 
         // factory for getting ObjectAnimator
-        mCircleAnimator = ObjectAnimator.ofInt(view, CircleView.COLOR, Color.RED);
+        mCircleAnimator = ObjectAnimator.ofInt(view, CircleView.COLOR, Color.CYAN, Color.RED);
+
+        // set evaluator for color
+        ArgbEvaluator colorEvaluator = new ArgbEvaluator();
+        colorEvaluator.evaluate((float) 0.001, Color.CYAN, Color.RED);
+        mCircleAnimator.setEvaluator(colorEvaluator);
 
         // set animation duration
         mCircleAnimator.setDuration(duration);
@@ -96,6 +102,7 @@ public class MainActivity extends Activity {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 // unsafe casting
                 ((CircleView)view).setColor((Integer) valueAnimator.getAnimatedValue());
+
                 // redraw
                 ((CircleView)view).updateColor();
 
