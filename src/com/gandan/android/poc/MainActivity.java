@@ -1,5 +1,8 @@
 package com.gandan.android.poc;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.app.Activity;
@@ -11,28 +14,33 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
+import android.animation.ObjectAnimator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.ValueAnimator.AnimatorUpdateListener;
 
 import com.gandan.android.poc.clipboard.ClipboardGetterUnderSDK11;
 import com.gandan.android.poc.clipboard.ClipboardGetterFromAndOverSDK11;
 import com.gandan.android.poc.service.local.LocalWordService;
 import com.gandan.android.poc.bluetooth.BluetoothModule;
+import com.gandan.android.poc.ui.CircleView;
 
 public class MainActivity extends Activity {
 	private LocalWordService s;
+    private ObjectAnimator mCircleAnimator;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		doBindService();
-		
+
 	}
 
 	void doBindService() {
 		bindService(new Intent(this, LocalWordService.class), mConnection,
 	        Context.BIND_AUTO_CREATE);
 	}
-	  
+
 	private ServiceConnection mConnection = new ServiceConnection() {
 	    public void onServiceConnected(ComponentName className, IBinder binder) {
 	      s = ((LocalWordService.MyBinder) binder).getService();
@@ -51,7 +59,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-	
+
 	public void getTextClipboardUnderSDK11(View view){
 		new ClipboardGetterUnderSDK11(this);
 	}
@@ -59,7 +67,7 @@ public class MainActivity extends Activity {
 	public void getTextClipboardFromAndOverSDK11(View view){
 		new ClipboardGetterFromAndOverSDK11(this);
 	}
-	
+
 	public void getListWordFromLocalService(View view){
 	    if (s != null) {
 	    	Toast.makeText(MainActivity.this, "Number of elements" + s.getWordList().size(),
@@ -69,5 +77,37 @@ public class MainActivity extends Activity {
 
     public void getBluetoothAdapter(View view){
 	new BluetoothModule(this);
+    }
+
+    /**
+     * Do animation when CircleView is clicked
+     *
+     * @param view instance of CircleView
+     */
+    public void animateCircle(final View view) {
+        long duration = 3000;
+
+        // factory for getting ObjectAnimator
+        mCircleAnimator = ObjectAnimator.ofInt(view, CircleView.COLOR, Color.RED);
+
+        // set animation duration
+        mCircleAnimator.setDuration(duration);
+
+        // add animation update event listener
+        mCircleAnimator.addUpdateListener(new AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                // unsafe casting
+                ((CircleView)view).setProgressBackgroundColor((Integer)valueAnimator.getAnimatedValue());
+                // redraw
+                ((CircleView)view).redraw();
+
+                // Change background color through view
+                //view.setBackgroundColor((Integer)valueAnimator.getAnimatedValue());
+            }
+        });
+
+        // start animation
+        mCircleAnimator.start();
     }
 }
